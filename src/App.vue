@@ -1,10 +1,10 @@
 <template>
   <div id="app">
   <div class="experiment">
-    <button @click="create">create</button>
-    <button @click="filterUnder5">filter under 5</button>
-    <button @click="resetFilter">reset filter</button>
-    <button @click="update">update the first item (id 1)</button>
+    <button @click="create">create item</button>
+    <!--<button @click="filterUnder5">filter under 5</button>
+    <button @click="resetFilter">reset filter</button>-->
+    <button @click="update">Arbitrary update first</button>
     </div>
     <hr>
     <ul>
@@ -23,14 +23,15 @@ import {
   UPDATE,
   DELETE
 } from './store/consts'
+
 export default {
   name: 'app',
-  created() {
-    this.items = this.$store.state.items.slice()
-  },
-  data() {
-    return {
-      items: []
+  // created() {
+  //   this.items = this.$store.state.items.slice()
+  // },
+  computed: {
+    items() {
+      return this.$store.state.items
     }
   },
   methods: {
@@ -43,24 +44,17 @@ export default {
           'thats': 'the true'
         }
       })
-      this.updateView()
     },
 
-    updateView() {
-      const allItems = this.$store.getters.allItems
-      const len = this.items.length
-      this.items.splice(0, len, ...allItems)
-    },
+    // resetFilter () {
+    //   this.updateView()
+    // },
 
-    resetFilter () {
-      this.updateView()
-    },
-
-    filterUnder5 () {
-      const filteredItems = this.$store.getters.filterUnder5
-      const len = this.items.length
-      this.items.splice(0, len, ...filteredItems)
-    },
+    // filterUnder5 () {
+    //   const filteredItems = this.$store.getters.filterUnder5
+    //   const len = this.items.length
+    //   this.items.splice(0, len, ...filteredItems)
+    // },
 
     update () {
       this.$store.dispatch({
@@ -71,7 +65,6 @@ export default {
           updated: 'now'
         }
       })
-      this.updateView()
     },
 
     deleteItem(item) {
@@ -79,7 +72,6 @@ export default {
         type: DELETE,
         item
       })
-      this.updateView()
     }
   }
 }
@@ -104,10 +96,16 @@ ul {
 li {
   text-align: center;
   list-style: none;
-  margin: 10px;
   box-shadow: inset 0 0 5px 0 rgba(0,0,0,0.6);
   padding: 10px;
   border-radius: 5px;
+}
+li, button {
+  margin: 10px;
+}
+button {
+  border-radius: 5px;
+  cursor: pointer;
 }
 button:not(.delete) {
   background-color: #00f;
@@ -117,15 +115,10 @@ button:not(.delete) {
   min-width: 140px;
   border: none;
   outline: none;
-  border-radius: 5px;
-  cursor: pointer;
-  margin: 10px;
 }
 .delete {
   background-color: red;
   height: 28px;
   color: yellow;
-  border-radius: 5px;
-
 }
 </style>

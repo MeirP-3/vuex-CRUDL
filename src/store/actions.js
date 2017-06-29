@@ -1,5 +1,6 @@
 import itemsService from '../services/items.service'
 import {
+    PULL,
     CREATE,
     UPDATE,
     DELETE
@@ -7,25 +8,29 @@ import {
 
 export default {
 
-    [CREATE] ({commit}, {item}) {
-        item = itemsService.setId(item)
-        commit ({
-            type: CREATE, 
-            item
+    [CREATE]({ commit }, payload) {
+        itemsService.setId(payload.item)
+        .then(() => {
+            return itemsService.create(payload.item)
+        })
+        .then(() => {
+            commit(PULL)
         })
     },
 
-    [UPDATE] ({commit}, {item}) {
-        commit ({
-            type: UPDATE,
-            item
-        })
+    [UPDATE]({ commit }, payload) {
+        itemsService.update(payload.item)
+        .then(() => {
+            commit(PULL)
+        }, (error) => console.log(error))
     },
 
-    [DELETE] ({commit}, {item}) {
-        commit ({
-            type: DELETE,
-            item
+    [DELETE]({ commit }, payload) {
+        itemsService.delete(payload.item)
+        .then(() => {
+            commit(PULL)
+        }, () => {
+            console.log('error: failed to delete')
         })
     }
 }

@@ -1,11 +1,16 @@
+import axios from 'axios-es6'
+
+const url = 'localhost:3003/data'
+
 const items = []
 
-let nextId = JSON.parse(localStorage.getItem('nextId')) || 1
+let nextId = ('nextId') || 1
 
 export default {
 
     pushItems(items) {
-        localStorage.setItem('items', JSON.stringify(items))
+        const pm = axios.post('/items', items)
+        return pm
     },
 
     setId(item) {
