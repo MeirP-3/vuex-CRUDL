@@ -1,67 +1,46 @@
+import axios from 'axios-es6'
+
+const url = 'http://localhost:2999/'
+
 const items = []
 
-let nextId = JSON.parse(localStorage.getItem('nextId')) || 1
-
 export default {
+    
+    // pushItems(items) {
+    //     const pm = axios.put('/', items)
+    //     return pm
+    // },
 
-    pushItems(items) {
-        localStorage.setItem('items', JSON.stringify(items))
-    },
-
-    setId(item) {
-        const pm = new Promise((resolve, reject) => {
-            item._id = nextId
-            nextId++
-            localStorage.setItem('nextId', nextId)
-            resolve()
-        })
-        return pm
-    },
+    // setId(item) {
+    //     const pm = new Promise((resolve, reject) => {
+    //         item._id = nextId
+    //         nextId++
+    //         localStorage.setItem('nextId', nextId)
+    //         resolve()
+    //     })
+    //     return pm
+    // },
 
     create(item) {
-        const pm = new Promise(resolve => {
-            const allItems = this.pullItems()
-            allItems.push(item)
-            this.pushItems(allItems)
-            resolve()
-        })
+        const pm = axios.post(url, item)
         return pm
     },
 
     pullItems() {
-        const allItems = JSON.parse(localStorage.getItem('items')) || []
-        items.splice(0, items.length, ...allItems)
+        axios.get(url)
+        .then(res => items.splice(0, items.length, ...res.data))
         return items
     },
 
     update(updatedItem) {
-        const pm = new Promise((resolve, reject) => {
-            if (items.length) {
-                const idx = items.findIndex((item) => item._id === updatedItem._id)
-                if (idx > -1) {
-                    const allItems = this.pullItems()
-                    allItems.splice(idx, 1, updatedItem)
-                    this.pushItems(allItems)
-                    resolve()
-                }
-            }
-            reject('Error: item with id ' + updatedItem._id + ' was not found')
-        })
+        const updateUrl = url + updatedItem._id
+        const pm = axios.put(updateUrl, updatedItem)
         return pm
     },
 
-    delete(item) {
-        const pm = new Promise((resolve, reject) => {
-
-            let atLeast2 = items.length > 1
-            const allItems = this.pullItems()
-            allItems.splice(items.indexOf(item), 1)
-
-            if (atLeast2) this.pushItems(allItems)
-            else localStorage.removeItem('items', '')
-
-            resolve()
-        })
+    delete(itemId) {
+        const deleteUrl = url + itemId
+        const pm = axios.delete(deleteUrl)
         return pm
     }
 }

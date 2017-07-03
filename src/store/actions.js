@@ -9,10 +9,7 @@ import {
 export default {
 
     [CREATE]({ commit }, payload) {
-        itemsService.setId(payload.item)
-        .then(() => {
-            return itemsService.create(payload.item)
-        })
+        itemsService.create(payload.item)
         .then(() => {
             commit(PULL)
         })
@@ -26,11 +23,11 @@ export default {
     },
 
     [DELETE]({ commit }, payload) {
-        itemsService.delete(payload.item)
+        itemsService.delete(payload.itemId)
         .then(() => {
             commit(PULL)
-        }, () => {
-            console.log('error: failed to delete')
+        }, (res) => {
+            console.log('error: failed to delete', res)
         })
     }
 }

@@ -1,124 +1,60 @@
 <template>
-  <div id="app">
-  <div class="experiment">
-    <button @click="create">create item</button>
-    <!--<button @click="filterUnder5">filter under 5</button>
-    <button @click="resetFilter">reset filter</button>-->
-    <button @click="update">Arbitrary update first</button>
-    </div>
-    <hr>
-    <ul>
-        <li v-for="item in items" :key="item.id">
-          {{item}}
-        <button class="delete" @click="deleteItem(item)">delete</button>
-      </li>
-    </ul>
-    <router-view></router-view>
+  <div id="app" :style="colors">
+    <nav>
+      <ul>
+        <router-link tag="li" to="/hello">Hello</router-link>
+        <router-link tag="li" to="/crud">Crud</router-link>
+        <router-link tag="li" to="/user-prefs">Prefferences</router-link>
+      </ul>
+    </nav>
+    <main>
+      <router-view></router-view>
+    </main>
   </div>
 </template>
 
 <script>
-import {
-  CREATE,
-  UPDATE,
-  DELETE
-} from './store/consts'
-
 export default {
   name: 'app',
-  // created() {
-  //   this.items = this.$store.state.items.slice()
-  // },
   computed: {
-    items() {
-      return this.$store.state.items
-    }
-  },
-  methods: {
-
-    create () {
-      this.$store.dispatch({
-        type: CREATE,
-        item: {
-          object: 'I am',
-          'thats': 'the true'
-        }
-      })
-    },
-
-    // resetFilter () {
-    //   this.updateView()
-    // },
-
-    // filterUnder5 () {
-    //   const filteredItems = this.$store.getters.filterUnder5
-    //   const len = this.items.length
-    //   this.items.splice(0, len, ...filteredItems)
-    // },
-
-    update () {
-      this.$store.dispatch({
-        type: UPDATE,
-        item: {
-          _id: 1,
-          I: 'am',
-          updated: 'now'
-        }
-      })
-    },
-
-    deleteItem(item) {
-      this.$store.dispatch({
-        type: DELETE,
-        item
-      })
+    colors() {
+      return this.$store.state.colors
     }
   }
 }
 </script>
 
 <style>
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+/*body {
+  overflow: hidden
+}*/
+.modal-open {
+  background-color: #000;
+  overflow: hidden
+}
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-.experiment {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  align-content: center;
-  align-items: center;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-align: center;
+  padding: 10px;
+  height: 100%;
 }
 ul {
+  list-style-type: none;
   padding: 0;
 }
 li {
-  text-align: center;
-  list-style: none;
-  box-shadow: inset 0 0 5px 0 rgba(0,0,0,0.6);
-  padding: 10px;
-  border-radius: 5px;
-}
-li, button {
-  margin: 10px;
-}
-button {
-  border-radius: 5px;
+  display: inline-block;
+  margin: 0 10px;
   cursor: pointer;
 }
-button:not(.delete) {
-  background-color: #00f;
-  color: #fff;
-  font-size: 1.5em;
-  height: 50px;
-  min-width: 140px;
-  border: none;
-  outline: none;
-}
-.delete {
-  background-color: red;
-  height: 28px;
-  color: yellow;
+a {
+  color: #00f;
 }
 </style>

@@ -1,4 +1,6 @@
 require('./check-versions')()
+// const cors = require('cors')
+// app.use(cors())
 
 var config = require('../config')
 if (!process.env.NODE_ENV) {
